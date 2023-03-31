@@ -1,24 +1,26 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, HttpException, HttpStatus, Query } from '@nestjs/common';
 import { SessionService } from '../session/session.service';
 import { VerifierService } from './verifier.service';
 
 @Controller('verifier')
 export class VerifierController {
-  constructor(
-    private readonly verifierService: VerifierService,
-    private readonly sessionService: SessionService
-  ) {}
+    constructor(
+        private readonly verifierService: VerifierService,
+        private readonly sessionService: SessionService
+    ) { }
 
-  @Get('/proofs/request')
-  public async requestProof(@Query('cred-def-id') credDefId: string) {
-    return await this.verifierService.createProofRequest(this.sessionService.session, credDefId);
-  }
-
-  @Get('/proofs/check')
-  public async verifyProof(@Query('proof-id') proofId?: string) {
-    return await this.verifierService.checkProof(
-      this.sessionService.session,
-      proofId,
-    );
-  }
+    @Get('/proofs/request')
+    public async requestProof(@Query('cred-def-id') credDefId: string) {
+        return await this.verifierService.createProofRequest(this.sessionService.session, credDefId).catch(e => {
+            throw new HttpException("error: " + e, HttpStatus.BAD_REQUEST)
+        });
+    }
+    public async verifyProof(@Query('proof-id') proofId?: string) {
+        return await this.verifierService.checkProof(
+            this.sessionService.session,
+            proofId,
+        ).catch(e => {
+            throw new HttpException("error: " + e, HttpStatus.INTERNAL_SERVER_ERROR)
+        });
+    }
 }
