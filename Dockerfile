@@ -1,44 +1,49 @@
-# Base image
 FROM ubuntu:18.04
 
 RUN apt-get update -y \
     && apt-get install -y curl build-essential
 
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - \ 
-    && apt-get install -y nodejs
+RUN apt-get install gcc g++ make
 
-RUN apt-get install -y npm \
-    && npm -v
+RUN apt-get install -y curl
 
-RUN apt-get update -y && apt-get install -y \
-    wget \
-    apt-transport-https \
-    ca-certificates \
-    software-properties-common
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt-get install -y nodejs
+
+RUN node -v
+RUN npm -v
+
+RUN npm install --global yarn
+
+RUN apt-get install -y libsodium-dev
+
+RUN apt-get install -y libzmq3-dev
+
+# RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh 
+RUN git clone https://github.com/hyperledger/indy-sdk
+RUN cd indy-sdk/libindy
+RUN cargo build --release
+RUN mv target/release/libindy.so /usr/lib/libindy.so
+
+# COPY libindy.so /usr/lib/libindy.so
 
 
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CE7709D068DB5E88 \
-    && add-apt-repository "deb https://repo.sovrin.org/sdk/deb xenial stable" \
-    && apt-get update \
-    && apt-get install -y \
-    libindy=1.11.0
+RUN npm install -g @nestjs/cli
 
-# Create app directory
-WORKDIR /home/indy/app
+# RUN npm i -g npx
 
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-COPY package*.json ./
+# RUN npx -p @aries-framework/node@^0.3 is-indy-installed
 
-# Install app dependencies
-RUN npm install 
+WORKDIR /usr/src/.
 
-# Bundle app source
 COPY . .
 
-# Creates a "dist" folder with the production build
-RUN npm run build
+RUN npm install
 
-# Start the server using the production build
-CMD [ "node", "dist/main.js" ]
+# RUN rm -rf yarn.lock package-lock.json
 
-EXPOSE 8888 9000
+# RUN yarn add @aries-framework/core @aries-framework/node
+
+
+CMD [ "npm", "run", "start:dev:issuer" ]
