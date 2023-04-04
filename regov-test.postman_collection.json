@@ -1,0 +1,468 @@
+{
+	"info": {
+		"_postman_id": "01043a5f-74d4-4eb9-8204-be80f746db29",
+		"name": "regov-test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8381282"
+	},
+	"item": [
+		{
+			"name": "Issuer / Verifier",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"walletId\": \"issuer-wallet-id\",\n    \"walletKey\": \"issuer-wallet-key\",\n    \"seed\": \"demoissuerdidseed000000000000000\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{issuer_host}}/login",
+							"host": [
+								"{{issuer_host}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Schema & Def",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Identity01\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{issuer_host}}/issuer/credentials/schemas",
+							"host": [
+								"{{issuer_host}}"
+							],
+							"path": [
+								"issuer",
+								"credentials",
+								"schemas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Invitation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{issuer_host}}/invitations",
+							"host": [
+								"{{issuer_host}}"
+							],
+							"path": [
+								"invitations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Offer Credential",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Jeremy\",\n    \"sex\": \"male\",\n    \"birth_year\": \"1993\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{issuer_host}}/issuer/credentials/offer?cred-def-id={{schema-def-id}}",
+							"host": [
+								"{{issuer_host}}"
+							],
+							"path": [
+								"issuer",
+								"credentials",
+								"offer"
+							],
+							"query": [
+								{
+									"key": "cred-def-id",
+									"value": "{{schema-def-id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Proof Request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{issuer_host}}/verifier/proofs/check?proof-id=0e1af09b-8ece-4d69-96c7-7425c1b9884e",
+							"host": [
+								"{{issuer_host}}"
+							],
+							"path": [
+								"verifier",
+								"proofs",
+								"check"
+							],
+							"query": [
+								{
+									"key": "proof-id",
+									"value": "0e1af09b-8ece-4d69-96c7-7425c1b9884e"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create-proof-request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Holder",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"walletId\": \"holder-wallet-id\",\n    \"walletKey\": \"holder-wallet-key\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{holder_host}}/login",
+							"host": [
+								"{{holder_host}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accept Invitation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{holder_host}}/invitations/accept?invitation-url=https://localhost:9002?oob=eyJAdHlwZSI6Imh0dHBzOi8vZGlkY29tbS5vcmcvb3V0LW9mLWJhbmQvMS4xL2ludml0YXRpb24iLCJAaWQiOiI4YWMwN2U1NS03ZjFlLTRjODYtOWJlMy0xOTU5ODE0ODI2OTYiLCJsYWJlbCI6ImFnZW50IiwiYWNjZXB0IjpbImRpZGNvbW0vYWlwMSIsImRpZGNvbW0vYWlwMjtlbnY9cmZjMTkiXSwiaGFuZHNoYWtlX3Byb3RvY29scyI6WyJodHRwczovL2RpZGNvbW0ub3JnL2RpZGV4Y2hhbmdlLzEuMCIsImh0dHBzOi8vZGlkY29tbS5vcmcvY29ubmVjdGlvbnMvMS4wIl0sInNlcnZpY2VzIjpbeyJpZCI6IiNpbmxpbmUtMCIsInNlcnZpY2VFbmRwb2ludCI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTAwMiIsInR5cGUiOiJkaWQtY29tbXVuaWNhdGlvbiIsInJlY2lwaWVudEtleXMiOlsiZGlkOmtleTp6Nk1rZkZrUVc2Z2hmTUR2WmlEZWdCazVpS0hpc1IyVXpyeU0xZ1k4bVl2aVdBVTEiXSwicm91dGluZ0tleXMiOltdfV19",
+							"host": [
+								"{{holder_host}}"
+							],
+							"path": [
+								"invitations",
+								"accept"
+							],
+							"query": [
+								{
+									"key": "invitation-url",
+									"value": "https://localhost:9002?oob=eyJAdHlwZSI6Imh0dHBzOi8vZGlkY29tbS5vcmcvb3V0LW9mLWJhbmQvMS4xL2ludml0YXRpb24iLCJAaWQiOiI4YWMwN2U1NS03ZjFlLTRjODYtOWJlMy0xOTU5ODE0ODI2OTYiLCJsYWJlbCI6ImFnZW50IiwiYWNjZXB0IjpbImRpZGNvbW0vYWlwMSIsImRpZGNvbW0vYWlwMjtlbnY9cmZjMTkiXSwiaGFuZHNoYWtlX3Byb3RvY29scyI6WyJodHRwczovL2RpZGNvbW0ub3JnL2RpZGV4Y2hhbmdlLzEuMCIsImh0dHBzOi8vZGlkY29tbS5vcmcvY29ubmVjdGlvbnMvMS4wIl0sInNlcnZpY2VzIjpbeyJpZCI6IiNpbmxpbmUtMCIsInNlcnZpY2VFbmRwb2ludCI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTAwMiIsInR5cGUiOiJkaWQtY29tbXVuaWNhdGlvbiIsInJlY2lwaWVudEtleXMiOlsiZGlkOmtleTp6Nk1rZkZrUVc2Z2hmTUR2WmlEZWdCazVpS0hpc1IyVXpyeU0xZ1k4bVl2aVdBVTEiXSwicm91dGluZ0tleXMiOltdfV19"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accept Credential",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{holder_host}}/holder/credentials/accept?credential_id=",
+							"host": [
+								"{{holder_host}}"
+							],
+							"path": [
+								"holder",
+								"credentials",
+								"accept"
+							],
+							"query": [
+								{
+									"key": "credential_id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accept Proof Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{holder_host}}/holder/proofs/accept",
+							"host": [
+								"{{holder_host}}"
+							],
+							"path": [
+								"holder",
+								"proofs",
+								"accept"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCred",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{holder_host}}/holder/credentials/get?credential-id=fa4cfdbc-f69b-472c-b2ff-9789776a854e",
+							"host": [
+								"{{holder_host}}"
+							],
+							"path": [
+								"holder",
+								"credentials",
+								"get"
+							],
+							"query": [
+								{
+									"key": "credential-id",
+									"value": "fa4cfdbc-f69b-472c-b2ff-9789776a854e"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllCreds",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{holder_host}}/holder/credentials/getAll",
+							"host": [
+								"{{holder_host}}"
+							],
+							"path": [
+								"holder",
+								"credentials",
+								"getAll"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "declineCred",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{holder_host}}/holder/credentials/decline?credential-id=",
+							"host": [
+								"{{holder_host}}"
+							],
+							"path": [
+								"holder",
+								"credentials",
+								"decline"
+							],
+							"query": [
+								{
+									"key": "credential-id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Verifier",
+			"item": [
+				{
+					"name": "create-proof-request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{verifier_host}}/verifier/proofs/request",
+							"host": [
+								"{{verifier_host}}"
+							],
+							"path": [
+								"verifier",
+								"proofs",
+								"request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"walletId\": \"verifier-wallet-id\",\n    \"walletKey\": \"verifier-wallet-key\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{verifier_host}}/login",
+							"host": [
+								"{{verifier_host}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Invitation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{verifier_host}}/invitations",
+							"host": [
+								"{{verifier_host}}"
+							],
+							"path": [
+								"invitations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Proof Request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{verifier_host}}/verifier/proofs/check?proof-id=",
+							"host": [
+								"{{verifier_host}}"
+							],
+							"path": [
+								"verifier",
+								"proofs",
+								"check"
+							],
+							"query": [
+								{
+									"key": "proof-id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "issuer_host",
+			"value": "localhost:8880",
+			"type": "string"
+		},
+		{
+			"key": "holder_host",
+			"value": "localhost:8881",
+			"type": "string"
+		},
+		{
+			"key": "verifier_host",
+			"value": "localhost:8882",
+			"type": "string"
+		},
+		{
+			"key": "schema-def-id",
+			"value": "LJk1HdDk7uYj6aZb9qWuHF:3:CL:746868:CI1",
+			"type": "string"
+		}
+	]
+}
