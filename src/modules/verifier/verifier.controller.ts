@@ -15,6 +15,8 @@ export class VerifierController {
             throw new HttpException("error: " + e, HttpStatus.BAD_REQUEST)
         });
     }
+
+    @Get('/proofs/check')
     public async verifyProof(@Query('proof-id') proofId?: string) {
         return await this.verifierService.checkProof(
             this.sessionService.session,
