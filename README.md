@@ -1,17 +1,18 @@
 # Weidy
 
-This project is based on `Aries` framework, so firstly please follow the [instruction](https://aries.js.org/guides/getting-started/installation) before going deeply
-
 ## Running
 
-### Using `npm`
+### Using npm
+
+This project is based on `Aries` framework, so firstly please follow the [instruction](https://aries.js.org/guides/getting-started/installation) before going deeply
+
 ```bash
 npm run start:dev:issue       # run as issuer
 npm run start:dev:holder      # run as holder
 npm run start:dev:verifier    # run as verifier
 ```
 
-### Using Docker
+### Or using Docker
 ```bash
 # Building
 docker build -f Dockerfile_issuer -t weidy-issuer:v1.0.0 .      # build issuer
