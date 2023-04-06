@@ -14,11 +14,15 @@ function main() {
     let temp: string[] = []
     let buffer: string[] = []
 
-    let output = 0
+    let output: number | null = 0
 
     for (let i = 0; i < input.length; i++) {
         if (!isDigit(input[i])) {
             output = handleOperator(parseInt(temp[0]), parseInt(temp[1]), input[i])
+            if (output === null) {
+                console.log("invalid input")
+                return
+            }
 
             temp = []
             let r = buffer.pop()
@@ -41,7 +45,10 @@ function main() {
     console.log(output)
 }
 
-function handleOperator(val1: number, val2: number, ope: string): number {
+function handleOperator(val1: number, val2: number, ope: string): number | null {
+    if (isNaN(val1) || isNaN(val2)) {
+        return null
+    }
     switch (ope) {
         case "+": {
             return val1 + val2
@@ -54,12 +61,12 @@ function handleOperator(val1: number, val2: number, ope: string): number {
         }
         case "/": {
             if (val2 == 0) {
-                return 0
+                return null
             }
             return val1 / val2
         }
         default: {
-            return 0
+            return null
         }
     }
 }
